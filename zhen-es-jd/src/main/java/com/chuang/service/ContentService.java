@@ -8,7 +8,6 @@ import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.client.Request;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.common.text.Text;
@@ -23,7 +22,6 @@ import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.naming.directory.SearchResult;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +34,7 @@ public class ContentService {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
 
+    //1.解析数据放入es索引中
     public boolean parseContent(String keywords) throws IOException {
         List<Content> contents = new HtmlParseUtil().parseJD(keywords);
 
@@ -51,6 +50,7 @@ public class ContentService {
         return !bulk.hasFailures();
     }
 
+    //2.获取这些数据实现搜索功能
     public List<Map<String,Object>> searchPage(String keyword,int pageNo,int pageSize) throws IOException {
         if (pageNo<=1){
             pageNo = 1;
@@ -93,7 +93,6 @@ public class ContentService {
                 String n_title = "";
                 for (Text text : fragments){
                     n_title += text;
-
                 }
                 sourceAsMap.put("title",n_title);  //高亮字段替换
             }

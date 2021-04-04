@@ -27,6 +27,5 @@ public class ContentController {
                                            @PathVariable("pageSize") int pageSize) throws IOException {
 
         return contentService.searchPage(keyword,pageNo,pageSize);
-
     }
 }
